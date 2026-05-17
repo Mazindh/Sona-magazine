@@ -1,0 +1,974 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>صُنّاع — مجلة الصناعات الإبداعية في سلطنة عُمان</title>
+<meta name="description" content="مجلة صُنّاع — رصد للمشهد الإبداعي في سلطنة عُمان: الإعلام الرقمي وصناعة المحتوى، الفنون والتصميم، الاقتصاد الإبداعي وريادة الأعمال، الابتكار والتقنية الإبداعية.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bone:#FAFAF7;
+  --ink:#101115;
+  --ink-2:#1c1d23;
+  --muted:#6b6c75;
+  --rule:rgba(16,17,21,.12);
+  --rule-strong:rgba(16,17,21,.6);
+  --purple:#661BD1;
+  --violet:#C32EF7;
+  --bg:var(--bone);
+  --fg:var(--ink);
+  --card:#ffffff;
+  --nav-h:138px;
+  --maxw:1320px;
+  --pad:clamp(20px,4vw,56px);
+}
+:root[data-theme="dark"]{
+  --bg:#0b0c10;
+  --fg:#f3f3ef;
+  --card:#15161c;
+  --ink:#f3f3ef;
+  --ink-2:#dcdcd6;
+  --muted:#9a9ba4;
+  --rule:rgba(243,243,239,.14);
+  --rule-strong:rgba(243,243,239,.55);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:"Tajawal",system-ui,-apple-system,Segoe UI,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{padding-top:var(--nav-h);transition:background .35s ease,color .35s ease}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;background:none;border:0;color:inherit}
+.container{max-width:var(--maxw);margin:0 auto;padding-inline:var(--pad)}
+
+/* -------- NAV -------- */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  height:var(--nav-h);background:var(--bg);
+  border-bottom:1px solid var(--rule);
+  transition:background .35s ease,border-color .35s ease;
+}
+.nav-inner{
+  max-width:var(--maxw);margin:0 auto;padding:0 var(--pad);height:100%;
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:32px;
+}
+.brand{display:inline-flex;align-items:center;gap:14px}
+.brand .word-img{height:52px;width:auto;display:block}
+.brand .word-img.dark-only{display:none}
+:root[data-theme="dark"] .brand .word-img.light-only{display:none}
+:root[data-theme="dark"] .brand .word-img.dark-only{display:block}
+.nav-links{
+  display:flex;justify-content:center;align-items:center;gap:clamp(14px,2.2vw,32px);
+  font-size:14px;font-weight:500;color:var(--ink-2);
+}
+.nav-links a{position:relative;padding:6px 2px;transition:color .25s}
+.nav-links a:hover{color:var(--purple)}
+.nav-links a::after{
+  content:"";position:absolute;inset-inline:0;bottom:-4px;height:1px;background:var(--purple);
+  transform:scaleX(0);transform-origin:right;transition:transform .3s ease;
+}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-actions{display:flex;align-items:center;gap:10px}
+.icon-btn{
+  width:42px;height:42px;border:1px solid var(--rule);border-radius:50%;
+  display:inline-grid;place-items:center;transition:border-color .25s,background .25s,color .25s;
+}
+.icon-btn:hover{border-color:var(--purple);color:var(--purple)}
+.icon-btn svg{width:18px;height:18px}
+.menu-btn{display:none}
+
+/* -------- HERO -------- */
+.hero{
+  position:relative;
+  height:calc(100vh - var(--nav-h));
+  overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.hero .glow{
+  position:absolute;inset:-10% -10% auto -10%;height:80%;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 30%,rgba(195,46,247,.28),transparent 60%);
+  opacity:1;transition:opacity .5s ease;z-index:0;
+}
+.hero.no-glow .glow{opacity:0}
+.hero-track{position:relative;flex:1;display:flex;align-items:stretch;z-index:1}
+.slide{
+  position:absolute;inset:0;display:grid;
+  grid-template-columns:1.05fr .95fr;gap:clamp(24px,4vw,56px);
+  padding:clamp(20px,4vw,56px) var(--pad);
+  max-width:var(--maxw);margin-inline:auto;align-items:center;
+  opacity:0;transition:opacity .8s ease;pointer-events:none;
+}
+.slide.is-active{opacity:1;pointer-events:auto}
+.slide .copy{display:flex;flex-direction:column;gap:18px;min-width:0}
+.kicker{
+  display:inline-flex;align-items:center;gap:10px;font-size:13px;color:var(--purple);
+  letter-spacing:.04em;text-transform:uppercase;font-weight:700;
+}
+.kicker .num{font-feature-settings:"tnum";color:var(--purple)}
+.kicker::before{content:"";width:32px;height:1px;background:var(--purple)}
+.slide h1{
+  margin:0;font-weight:900;letter-spacing:-.01em;line-height:1.05;
+  font-size:clamp(34px,5.4vw,76px);
+}
+.slide .lede{
+  font-size:clamp(15px,1.3vw,18px);font-weight:300;line-height:1.7;color:var(--ink-2);
+  max-width:56ch;
+}
+.slide .meta{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
+.slide .meta .dot{width:3px;height:3px;border-radius:50%;background:var(--muted)}
+.cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:14px 22px;border-radius:999px;font-weight:700;font-size:14px;
+  transition:transform .2s ease,background .25s,color .25s,border-color .25s;
+}
+.btn-primary{background:var(--purple);color:#fff}
+.btn-primary:hover{background:#5215af;transform:translateY(-1px)}
+.btn-ghost{border:1px solid var(--rule-strong);color:var(--fg)}
+.btn-ghost:hover{border-color:var(--purple);color:var(--purple)}
+.btn svg{width:16px;height:16px}
+.slide .media{
+  position:relative;height:100%;display:flex;align-items:center;justify-content:center;
+}
+.slide .media-frame{
+  position:relative;height:100%;width:auto;aspect-ratio:4/5;max-width:100%;
+  background:linear-gradient(135deg,#e9e7df 0%,#d6d3c8 100%);
+  border:1px solid var(--rule);overflow:hidden;
+}
+:root[data-theme="dark"] .slide .media-frame{
+  background:linear-gradient(135deg,#1c1d24 0%,#0e0f14 100%);
+}
+.slide .media-frame::before{
+  content:"";position:absolute;inset:0;
+  background-image:repeating-linear-gradient(135deg,rgba(0,0,0,.04) 0 2px,transparent 2px 14px);
+}
+:root[data-theme="dark"] .slide .media-frame::before{
+  background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 2px,transparent 2px 14px);
+}
+.slide .media-frame .tag{
+  position:absolute;inset-inline-end:14px;top:14px;font-family:"SFMono-Regular",ui-monospace,Menlo,monospace;
+  font-size:11px;letter-spacing:.06em;color:var(--ink-2);background:rgba(255,255,255,.7);
+  padding:6px 10px;border:1px solid var(--rule);
+}
+:root[data-theme="dark"] .slide .media-frame .tag{background:rgba(0,0,0,.5);color:var(--ink-2)}
+.slide .media-frame .num-big{
+  position:absolute;left:18px;bottom:14px;font-weight:900;font-size:88px;line-height:1;
+  color:transparent;-webkit-text-stroke:1px var(--purple);font-family:"Tajawal";
+}
+
+/* hero controls */
+.hero-controls{
+  position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;
+  padding:18px var(--pad) 22px;max-width:var(--maxw);margin-inline:auto;width:100%;
+  border-top:1px solid var(--rule);
+}
+.dots{display:flex;gap:8px;align-items:center}
+.dots button{
+  width:10px;height:10px;border-radius:50%;border:1px solid var(--rule-strong);
+  background:transparent;padding:0;transition:all .25s;
+}
+.dots button.is-active{background:var(--purple);border-color:var(--purple);width:28px;border-radius:6px}
+.arrows{display:flex;gap:10px}
+.arrow{
+  width:44px;height:44px;border:1px solid var(--rule-strong);border-radius:50%;
+  display:grid;place-items:center;transition:all .25s;
+}
+.arrow:hover{background:var(--purple);border-color:var(--purple);color:#fff}
+.arrow svg{width:16px;height:16px}
+
+/* -------- SECTIONS LIST -------- */
+.section-head{
+  display:flex;align-items:baseline;justify-content:space-between;gap:24px;
+  padding-block:clamp(56px,8vw,96px) 24px;
+  border-bottom:1px solid var(--rule);margin-bottom:36px;
+}
+.section-head h2{
+  margin:0;font-size:clamp(28px,3.4vw,44px);font-weight:900;letter-spacing:-.01em;
+}
+.section-head .eyebrow{font-size:13px;color:var(--muted);letter-spacing:.06em}
+.sections-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:18px;
+  padding-bottom:clamp(56px,8vw,96px);
+}
+.section-card{
+  position:relative;display:flex;flex-direction:column;justify-content:space-between;
+  padding:28px 26px 26px;min-height:300px;
+  background:var(--card);border:1px solid var(--rule);
+  transition:transform .35s ease,border-color .35s,background .35s;
+  overflow:hidden;
+}
+.section-card::after{
+  content:"";position:absolute;inset:auto 0 0 0;height:2px;background:var(--purple);
+  transform:scaleX(0);transform-origin:right;transition:transform .4s ease;
+}
+.section-card:hover{transform:translateY(-4px);border-color:var(--rule-strong)}
+.section-card:hover::after{transform:scaleX(1)}
+.section-card .num{
+  font-weight:900;font-size:64px;line-height:1;color:transparent;
+  -webkit-text-stroke:1px var(--purple);transition:color .3s,-webkit-text-stroke-color .3s;
+}
+.section-card:hover .num{color:var(--purple)}
+.section-card h3{margin:0;font-size:22px;font-weight:800;line-height:1.3}
+.section-card p{margin:0;font-size:14px;color:var(--muted);line-height:1.7;font-weight:300}
+.section-card .arrow-mini{
+  display:inline-flex;align-items:center;gap:8px;color:var(--purple);font-weight:700;font-size:13px;
+}
+
+/* -------- GALLERY (عدسة الصُنّاع) -------- */
+.gallery-section{padding-bottom:clamp(56px,8vw,96px)}
+.gallery-stage{
+  position:relative;
+  aspect-ratio:16/9;max-height:72vh;
+  width:100%;margin-inline:auto;
+  background:#000;overflow:hidden;
+  border:1px solid var(--rule);
+}
+.gallery-slide{
+  position:absolute;inset:0;opacity:0;transition:opacity .8s ease;
+  display:flex;align-items:center;justify-content:center;cursor:zoom-in;
+  text-align:center;
+}
+.gallery-slide.is-active{opacity:1;z-index:2}
+.gallery-slide .bg{
+  position:absolute;inset:0;background-size:cover;background-position:center;
+  filter:blur(40px) saturate(1.1) brightness(.8);transform:scale(1.15);
+}
+.gallery-slide .glass{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.02) 40%,rgba(0,0,0,.18));
+  backdrop-filter:blur(6px);
+  pointer-events:none;
+}
+.gallery-slide img{
+  position:relative;z-index:2;
+  display:block;margin:auto;
+  max-height:100%;max-width:100%;width:auto;height:100%;object-fit:contain;
+}
+.gallery-slide.horizontal img{width:100%;height:100%;object-fit:cover;margin:0}
+.gallery-slide.horizontal .bg,.gallery-slide.horizontal .glass{display:none}
+.gallery-slide .caption{
+  position:absolute;z-index:3;inset-inline-start:24px;bottom:22px;
+  color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.55);
+  display:flex;flex-direction:column;gap:6px;max-width:70%;
+}
+.gallery-slide .caption .title{font-size:22px;font-weight:800;letter-spacing:-.01em}
+.gallery-slide .caption .meta{font-size:12px;opacity:.9;letter-spacing:.04em;font-weight:300}
+.gallery-slide .zoom-hint{
+  position:absolute;z-index:3;inset-inline-end:22px;top:22px;
+  background:rgba(0,0,0,.5);color:#fff;padding:8px 14px;border-radius:999px;
+  font-size:12px;font-weight:600;opacity:0;transition:opacity .25s;
+}
+.gallery-stage:hover .zoom-hint{opacity:1}
+.gallery-controls{
+  display:flex;justify-content:space-between;align-items:center;padding-top:18px;
+}
+.gallery-controls .dots{flex:1;justify-content:center}
+
+/* MODAL */
+.modal{
+  position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100;
+  display:none;align-items:center;justify-content:center;padding:32px;
+}
+.modal.is-open{display:flex}
+.modal img{max-width:92vw;max-height:88vh;object-fit:contain}
+.modal .close,.modal .nav-prev,.modal .nav-next{
+  position:absolute;background:rgba(255,255,255,.1);color:#fff;
+  width:48px;height:48px;border-radius:50%;display:grid;place-items:center;
+  transition:background .25s;
+}
+.modal .close:hover,.modal .nav-prev:hover,.modal .nav-next:hover{background:rgba(255,255,255,.22)}
+.modal .close{top:24px;inset-inline-end:24px}
+.modal .nav-prev{inset-inline-start:24px;top:50%;transform:translateY(-50%)}
+.modal .nav-next{inset-inline-end:24px;top:50%;transform:translateY(-50%)}
+.modal .modal-caption{
+  position:absolute;left:0;right:0;bottom:24px;color:#fff;text-align:center;
+  font-size:14px;letter-spacing:.04em;display:flex;flex-direction:column;gap:4px;align-items:center;
+}
+.modal .modal-caption .t{font-size:18px;font-weight:700}
+.modal .modal-caption .insta{font-size:12px;opacity:.7;font-family:"SFMono-Regular",ui-monospace,monospace}
+
+/* -------- COMMUNITY (مجتمع الصُنّاع) -------- */
+.community-section{padding-bottom:clamp(56px,8vw,96px);overflow:hidden}
+.marquee{
+  position:relative;direction:ltr;
+  overflow-x:auto;overflow-y:hidden;
+  -ms-overflow-style:none;scrollbar-width:none;
+  cursor:grab;user-select:none;-webkit-user-select:none;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+  scroll-behavior:auto;
+}
+.marquee::-webkit-scrollbar{display:none}
+.marquee.is-dragging{cursor:grabbing}
+.marquee-track{
+  display:flex;gap:22px;width:max-content;
+  padding-inline:var(--pad);
+}
+.marquee .person{direction:rtl}
+.marquee-arrows{
+  display:flex;justify-content:center;gap:12px;margin-top:22px;
+}
+.person{
+  width:280px;height:380px;position:relative;
+  perspective:1200px;flex:0 0 auto;
+}
+.person .flipper{
+  position:relative;width:100%;height:100%;
+  transition:transform .7s cubic-bezier(.22,.61,.36,1);
+  transform-style:preserve-3d;
+}
+.person:hover .flipper{transform:rotateY(180deg)}
+.person .face{
+  position:absolute;inset:0;backface-visibility:hidden;
+  border:1px solid var(--rule);overflow:hidden;
+  background:var(--card);
+}
+.person .front{display:flex;flex-direction:column;justify-content:flex-end}
+.person .front .photo{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,#dcd9cd 0%,#bdb9ac 100%);
+}
+:root[data-theme="dark"] .person .front .photo{
+  background:linear-gradient(135deg,#1c1d24,#0c0d12);
+}
+.person .front .photo::before{
+  content:"";position:absolute;inset:0;z-index:1;
+  background-image:repeating-linear-gradient(45deg,rgba(0,0,0,.05) 0 2px,transparent 2px 18px);
+}
+.person .front .photo img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;
+}
+.person .front .photo .ph-tag{
+  position:absolute;z-index:3;left:14px;top:14px;font-family:"SFMono-Regular",ui-monospace,monospace;
+  font-size:11px;letter-spacing:.06em;color:#222;background:rgba(255,255,255,.75);
+  padding:5px 9px;
+}
+:root[data-theme="dark"] .person .front .photo .ph-tag{background:rgba(0,0,0,.55);color:#ddd}
+.person .front .name-strip{
+  position:relative;z-index:2;padding:14px 16px;background:linear-gradient(transparent,rgba(0,0,0,.78));
+  color:#fff;
+}
+.person .front .name-strip .n{font-weight:800;font-size:17px}
+.person .front .name-strip .r{font-size:12px;opacity:.85;font-weight:300}
+.person .back{
+  transform:rotateY(180deg);background:var(--card);
+  padding:24px;display:flex;flex-direction:column;gap:12px;
+}
+.person .back .n{font-size:20px;font-weight:800}
+.person .back .r{font-size:13px;color:var(--purple);font-weight:700;letter-spacing:.03em}
+.person .back .bio{font-size:13px;color:var(--ink-2);line-height:1.7;font-weight:300}
+.person .back .studio{font-size:12px;color:var(--muted);margin-top:auto}
+.person .back .contact{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--rule);padding-top:12px}
+.person .back .contact a{
+  display:inline-flex;align-items:center;gap:10px;font-size:13px;
+  color:var(--ink-2);transition:color .2s;
+}
+.person .back .contact a:hover{color:var(--purple)}
+.person .back .contact svg{width:14px;height:14px;flex-shrink:0}
+
+/* -------- FOOTER -------- */
+.footer{
+  border-top:1px solid var(--rule);padding-block:48px 28px;background:var(--bg);
+}
+.footer-inner{
+  display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px;
+}
+.footer .brand-block{display:flex;flex-direction:column;gap:14px}
+.footer .word-img{height:72px;width:auto}
+.footer .brand-block.brand .word-img.dark-only{display:none}
+:root[data-theme="dark"] .footer .word-img.light-only{display:none}
+:root[data-theme="dark"] .footer .word-img.dark-only{display:block}
+.footer p{margin:0;font-size:13px;color:var(--muted);line-height:1.7;max-width:38ch}
+.footer h4{margin:0 0 14px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.footer ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.footer ul a{font-size:14px;color:var(--ink-2);transition:color .2s}
+.footer ul a:hover{color:var(--purple)}
+.footer .bottom{
+  border-top:1px solid var(--rule);margin-top:36px;padding-top:18px;
+  display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);
+}
+
+/* -------- TWEAKS PANEL -------- */
+.tweaks{
+  position:fixed;inset-inline-end:18px;bottom:18px;z-index:60;
+  background:var(--card);border:1px solid var(--rule);border-radius:14px;
+  box-shadow:0 12px 40px -10px rgba(0,0,0,.25);
+  padding:14px;min-width:240px;transform:translateY(8px);opacity:0;pointer-events:none;
+  transition:all .25s ease;
+}
+.tweaks.is-open{transform:translateY(0);opacity:1;pointer-events:auto}
+.tweaks h5{margin:0 0 10px;font-size:12px;letter-spacing:.08em;color:var(--muted);font-weight:700;text-transform:uppercase}
+.tweaks .row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:8px 4px;font-size:13px}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:999px;overflow:hidden}
+.seg button{padding:6px 12px;font-size:12px;font-weight:600;color:var(--muted);transition:all .2s}
+.seg button.is-on{background:var(--purple);color:#fff}
+.switch{
+  width:38px;height:22px;border-radius:999px;background:var(--rule);position:relative;
+  border:0;padding:0;transition:background .25s;
+}
+.switch::after{
+  content:"";position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;
+  background:#fff;transition:transform .25s;
+}
+.switch.is-on{background:var(--purple)}
+.switch.is-on::after{transform:translateX(-16px)}
+.tweaks-fab{
+  position:fixed;inset-inline-end:18px;bottom:18px;z-index:55;
+  width:48px;height:48px;border-radius:50%;background:var(--ink);color:var(--bg);
+  display:grid;place-items:center;box-shadow:0 8px 24px -6px rgba(0,0,0,.35);
+  transition:transform .25s;
+}
+.tweaks-fab:hover{transform:scale(1.06)}
+.tweaks-fab svg{width:18px;height:18px}
+
+/* -------- RESPONSIVE -------- */
+@media (max-width:1024px){
+  :root{--nav-h:130px}
+  .sections-grid{grid-template-columns:repeat(2,1fr)}
+  .slide{grid-template-columns:1fr;gap:18px}
+  .slide .media{display:none}
+  .footer-inner{grid-template-columns:1fr 1fr}
+}
+@media (max-width:720px){
+  :root{--nav-h:64px}
+  .nav-inner{grid-template-columns:auto 1fr auto;gap:12px}
+  .nav-links{display:none}
+  .menu-btn{display:inline-grid}
+  .nav-links.is-open{
+    display:flex;flex-direction:column;align-items:flex-start;gap:16px;
+    position:absolute;top:var(--nav-h);left:0;right:0;background:var(--bg);
+    padding:20px var(--pad);border-bottom:1px solid var(--rule);
+  }
+  .brand .word-img{height:36px}
+  .footer-inner{grid-template-columns:1fr}
+  .person{width:240px;height:340px}
+  .slide h1{font-size:36px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top" aria-label="مجلة صُنّاع">
+      <img class="word-img light-only" src="assets/logo-black.png" alt="صُنّاع">
+      <img class="word-img dark-only"  src="assets/logo-white.png" alt="صُنّاع">
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="sections/digital-media.html">الإعلام الرقمي وصناعة المحتوى</a>
+      <a href="sections/arts-design.html">الفنون والتصميم</a>
+      <a href="sections/creative-economy.html">الاقتصاد الإبداعي وريادة الأعمال</a>
+      <a href="sections/innovation-tech.html">الابتكار والتقنية الإبداعية</a>
+      <a href="#lens">عدسة الصُنّاع</a>
+      <a href="#community">مجتمع الصُنّاع</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn" id="themeBtn" aria-label="تبديل السمة" title="تبديل السمة">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="القائمة">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<a id="top"></a>
+
+<!-- HERO CAROUSEL -->
+<section class="hero" id="hero" aria-label="المقالات الرئيسية">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="hero-track" id="heroTrack"></div>
+  <div class="hero-controls">
+    <div class="dots" id="heroDots" role="tablist"></div>
+    <div class="arrows">
+      <button class="arrow" id="heroPrev" aria-label="السابق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+      <button class="arrow" id="heroNext" aria-label="التالي">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- SECTIONS -->
+<section class="container" id="sections">
+  <div class="section-head">
+    <h2>الأقسام</h2>
+    <span class="eyebrow">SECTIONS · 04</span>
+  </div>
+  <div class="sections-grid">
+    <a class="section-card" href="sections/digital-media.html" id="section-1">
+      <span class="num">01</span>
+      <div>
+        <h3>الإعلام الرقمي وصناعة المحتوى</h3>
+        <p>قراءة في تحوّلات الإعلام الجديد ومنصّات المحتوى الناشئة في المشهد العُماني.</p>
+      </div>
+      <span class="arrow-mini">قراءة القسم ←</span>
+    </a>
+    <a class="section-card" href="sections/arts-design.html" id="section-2">
+      <span class="num">02</span>
+      <div>
+        <h3>الفنون والتصميم</h3>
+        <p>من خطّ الثلث إلى الواجهات الرقمية — رحلة بين الحرفة والتجريد البصري.</p>
+      </div>
+      <span class="arrow-mini">قراءة القسم ←</span>
+    </a>
+    <a class="section-card" href="sections/creative-economy.html" id="section-3">
+      <span class="num">03</span>
+      <div>
+        <h3>الاقتصاد الإبداعي وريادة الأعمال</h3>
+        <p>قصص رياديّة وأرقام تكشف حجم الفرص في الصناعات الإبداعية بالسلطنة.</p>
+      </div>
+      <span class="arrow-mini">قراءة القسم ←</span>
+    </a>
+    <a class="section-card" href="sections/innovation-tech.html" id="section-4">
+      <span class="num">04</span>
+      <div>
+        <h3>الابتكار والتقنية الإبداعية</h3>
+        <p>الذكاء الاصطناعي، الواقع الممتد، والأدوات التي تعيد رسم ورشة المبدع.</p>
+      </div>
+      <span class="arrow-mini">قراءة القسم ←</span>
+    </a>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="container gallery-section" id="lens">
+  <div class="section-head">
+    <h2>عدسة الصُنّاع</h2>
+    <span class="eyebrow">LENS</span>
+  </div>
+  <div class="gallery-stage" id="galleryStage" aria-roledescription="carousel"></div>
+  <div class="gallery-controls">
+    <button class="arrow" id="galPrev" aria-label="السابق">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+    <div class="dots" id="galDots"></div>
+    <button class="arrow" id="galNext" aria-label="التالي">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 6l-6 6 6 6"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <button class="close" id="modalClose" aria-label="إغلاق">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <button class="nav-prev" id="modalPrev" aria-label="السابق">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6l6 6-6 6"/></svg>
+  </button>
+  <img id="modalImg" alt="">
+  <button class="nav-next" id="modalNext" aria-label="التالي">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 6l-6 6 6 6"/></svg>
+  </button>
+  <div class="modal-caption" id="modalCap"></div>
+</div>
+
+<!-- COMMUNITY -->
+<section class="community-section" id="community">
+  <div class="container">
+    <div class="section-head">
+      <h2>مجتمع الصُنّاع</h2>
+      <span class="eyebrow">COMMUNITY</span>
+    </div>
+  </div>
+  <div class="marquee" id="marquee">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
+  <div class="container marquee-arrows">
+    <button class="arrow" id="commPrev" aria-label="السابق">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+    <button class="arrow" id="commNext" aria-label="التالي">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 6l-6 6 6 6"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="brand-block brand">
+        <a href="#top" aria-label="صُنّاع">
+          <img class="word-img light-only" src="assets/logo-black.png" alt="صُنّاع">
+          <img class="word-img dark-only"  src="assets/logo-white.png" alt="صُنّاع">
+        </a>
+        <p>مجلة صُنّاع — رصد للصناعات الإبداعية في سلطنة عُمان. تصدر إلكترونياً من مسقط.</p>
+      </div>
+      <div>
+        <h4>الأقسام</h4>
+        <ul>
+          <li><a href="#section-1">الإعلام الرقمي</a></li>
+          <li><a href="#section-2">الفنون والتصميم</a></li>
+          <li><a href="#section-3">الاقتصاد الإبداعي</a></li>
+          <li><a href="#section-4">الابتكار والتقنية</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>روابط</h4>
+        <ul>
+          <li><a href="#lens">عدسة الصُنّاع</a></li>
+          <li><a href="#community">مجتمع الصُنّاع</a></li>
+          <li><a href="assets/sunaa-magazine.pdf" target="_blank" rel="noopener">العَدد الحالي (PDF)</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>تواصل</h4>
+        <ul>
+          <li><a href="mailto:hello@sunaa.om">hello@sunaa.om</a></li>
+          <li><a href="#">مسقط · سلطنة عُمان</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="bottom">
+      <span>© <span id="year"></span> مجلة صُنّاع · جميع الحقوق محفوظة</span>
+      <span>مسقط · سلطنة عُمان</span>
+    </div>
+  </div>
+</footer>
+
+<!-- TWEAKS -->
+<button class="tweaks-fab" id="tweaksFab" aria-label="تخصيص">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="3"/></svg>
+</button>
+<aside class="tweaks" id="tweaks">
+  <h5>Tweaks</h5>
+  <div class="row">
+    <span>السمة</span>
+    <div class="seg" id="segTheme">
+      <button data-val="light" class="is-on">فاتح</button>
+      <button data-val="dark">داكن</button>
+    </div>
+  </div>
+  <div class="row">
+    <span>توهّج Hero</span>
+    <button class="switch is-on" id="switchGlow" aria-pressed="true"></button>
+  </div>
+</aside>
+
+<script src="community/people.js"></script>
+<script>
+/* ==== DATA ==== */
+const HERO_SLIDES = [
+  {
+    kicker: "افتتاحية العدد", num: "01",
+    title: "حين يكتب الذكاء الاصطناعي قصيدةً عربية",
+    lede: "ماذا يحدث للقصيدة حين تمرّ عبر خوارزمية؟ قراءة في حدود التعاون بين الشاعر والآلة، ومحاولات عُمانية مبكّرة لإيجاد صوت أدبي هجين.",
+    section: "الابتكار والتقنية الإبداعية",
+    author: "مريم العامري",
+    minutes: "11 دقيقة",
+    tag: "AI · POETRY"
+  },
+  {
+    kicker: "ريبورتاج",  num: "02",
+    title: "صناعة المحتوى العُماني تتشكّل من جديد",
+    lede: "من مايكرو-إنفلونسرز في صلالة إلى استوديوهات بودكاست في مطرح — جولة بين الفاعلين الجدد الذين يعيدون تعريف المنصّات المحلية.",
+    section: "الإعلام الرقمي وصناعة المحتوى",
+    author: "سالم الحارثي",
+    minutes: "14 دقيقة",
+    tag: "REPORTAGE"
+  },
+  {
+    kicker: "ملف العدد", num: "03",
+    title: "خطّ الثلث في عصر الشاشات الصغيرة",
+    lede: "كيف يحافظ خطّاطو عُمان على روح الحرف العربي وهم يعيدون تطويعه لواجهات الموبايل والهويات الرقمية الجديدة.",
+    section: "الفنون والتصميم",
+    author: "ليلى البوسعيدي",
+    minutes: "9 دقائق",
+    tag: "DESIGN · TYPE"
+  },
+  {
+    kicker: "حوار",      num: "04",
+    title: "ريادة الأعمال الإبداعية: تجارب من مسقط",
+    lede: "ثلاثة مؤسّسين عُمانيين يتحدّثون عن بناء استوديوهات إبداعية مستقلّة — العوائد، الإخفاقات، والدروس التي لم يكتبها أحد بعد.",
+    section: "الاقتصاد الإبداعي وريادة الأعمال",
+    author: "زينب البلوشي",
+    minutes: "16 دقيقة",
+    tag: "INTERVIEW"
+  }
+];
+
+const GALLERY = [
+  {src:"assets/lens/time-traveler.jpg", title:"عابر الزمن",      insta:"@ —", vertical:true},
+  {src:"assets/lens/above-clouds.jpg",  title:"فوق السحاب",      insta:"@ —", vertical:true},
+  {src:"assets/lens/between-pegs.jpg",  title:"بين الأوتاد",     insta:"@ —"},
+  {src:"assets/lens/wild-roses.jpg",    title:"ورد المها",       insta:"@ —"},
+  {src:"assets/lens/stream.jpg",        title:"ساقية",            insta:"@ —"},
+  {src:"assets/lens/dome.jpg",          title:"قبة",              insta:"@ —"},
+  {src:"assets/lens/brave-fighter.jpg", title:"المناضل الشجاع",  insta:"@ —"},
+];
+
+/* PEOPLE data lives in community/people.js — edit that file to add/edit/remove people.
+   Photos live in community/<slug>/photo.jpg — drop a photo there per person. */
+const PEOPLE = window.PEOPLE || [];
+
+/* ==== HERO ==== */
+const heroTrack = document.getElementById('heroTrack');
+const heroDots = document.getElementById('heroDots');
+let heroIdx = 0;
+HERO_SLIDES.forEach((s,i)=>{
+  const el = document.createElement('article');
+  el.className = 'slide' + (i===0?' is-active':'');
+  el.innerHTML = `
+    <div class="copy">
+      <span class="kicker"><span class="num">${s.num}</span> · ${s.kicker}</span>
+      <h1>${s.title}</h1>
+      <p class="lede">${s.lede}</p>
+      <div class="meta">
+        <span>${s.section}</span><span class="dot"></span>
+        <span>${s.author}</span><span class="dot"></span>
+        <span>${s.minutes}</span>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="assets/sunaa-magazine.pdf" target="_blank" rel="noopener">
+          اقرأ العَدد
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 3h7v7M21 3l-9 9M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="#sections">تصفّح الأقسام</a>
+      </div>
+    </div>
+    <div class="media">
+      <div class="media-frame">
+        <span class="tag">${s.tag}</span>
+        <span class="num-big">${s.num}</span>
+      </div>
+    </div>`;
+  heroTrack.appendChild(el);
+  const d = document.createElement('button');
+  d.setAttribute('role','tab');
+  d.setAttribute('aria-label','الانتقال للشريحة '+(i+1));
+  if(i===0) d.classList.add('is-active');
+  d.addEventListener('click',()=>setHero(i));
+  heroDots.appendChild(d);
+});
+function setHero(i){
+  heroIdx = (i + HERO_SLIDES.length) % HERO_SLIDES.length;
+  [...heroTrack.children].forEach((el,k)=>el.classList.toggle('is-active', k===heroIdx));
+  [...heroDots.children].forEach((el,k)=>el.classList.toggle('is-active', k===heroIdx));
+}
+document.getElementById('heroPrev').onclick = ()=>setHero(heroIdx-1);
+document.getElementById('heroNext').onclick = ()=>setHero(heroIdx+1);
+let heroTimer = setInterval(()=>setHero(heroIdx+1), 7000);
+document.getElementById('hero').addEventListener('mouseenter',()=>clearInterval(heroTimer));
+document.getElementById('hero').addEventListener('mouseleave',()=>heroTimer=setInterval(()=>setHero(heroIdx+1),7000));
+
+/* ==== GALLERY ==== */
+const galStage = document.getElementById('galleryStage');
+const galDots = document.getElementById('galDots');
+let galIdx = 0;
+
+GALLERY.forEach((g,i)=>{
+  const slide = document.createElement('div');
+  slide.className = 'gallery-slide' + (g.vertical ? '' : ' horizontal') + (i===0 ? ' is-active' : '');
+  slide.innerHTML = `
+    <div class="bg" style="background-image:url('${g.src}')"></div>
+    <div class="glass"></div>
+    <img src="${g.src}" alt="${g.title}">
+    <div class="caption">
+      <div class="title">${g.title}</div>
+      <div class="meta">${g.insta}</div>
+    </div>
+    <div class="zoom-hint">اضغط للتكبير</div>`;
+  slide.addEventListener('click',()=>openModal(i));
+  galStage.appendChild(slide);
+
+  const d = document.createElement('button');
+  d.setAttribute('aria-label','الصورة '+(i+1));
+  if(i===0) d.classList.add('is-active');
+  d.addEventListener('click',()=>setGal(i));
+  galDots.appendChild(d);
+});
+function setGal(i){
+  galIdx = (i + GALLERY.length) % GALLERY.length;
+  [...galStage.children].forEach((el,k)=>el.classList.toggle('is-active', k===galIdx));
+  [...galDots.children].forEach((el,k)=>el.classList.toggle('is-active', k===galIdx));
+}
+document.getElementById('galPrev').onclick = ()=>setGal(galIdx-1);
+document.getElementById('galNext').onclick = ()=>setGal(galIdx+1);
+let galTimer = setInterval(()=>setGal(galIdx+1), 5000);
+galStage.addEventListener('mouseenter',()=>clearInterval(galTimer));
+galStage.addEventListener('mouseleave',()=>galTimer=setInterval(()=>setGal(galIdx+1),5000));
+
+/* ==== MODAL ==== */
+const modal = document.getElementById('modal');
+const mImg = document.getElementById('modalImg');
+const mCap = document.getElementById('modalCap');
+let mIdx = 0;
+function openModal(i){
+  mIdx = i;
+  paintModal();
+  modal.classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  modal.classList.remove('is-open');
+  document.body.style.overflow = '';
+}
+function paintModal(){
+  const g = GALLERY[mIdx];
+  mImg.src = g.src; mImg.alt = g.title;
+  mCap.innerHTML = `<span class="t">${g.title}</span><span class="insta">${g.insta}</span>`;
+}
+document.getElementById('modalClose').onclick = closeModal;
+document.getElementById('modalPrev').onclick = ()=>{mIdx=(mIdx-1+GALLERY.length)%GALLERY.length;paintModal();};
+document.getElementById('modalNext').onclick = ()=>{mIdx=(mIdx+1)%GALLERY.length;paintModal();};
+modal.addEventListener('click',e=>{ if(e.target===modal) closeModal(); });
+document.addEventListener('keydown',e=>{
+  if(!modal.classList.contains('is-open')) return;
+  if(e.key==='Escape') closeModal();
+  if(e.key==='ArrowLeft') document.getElementById('modalNext').click();
+  if(e.key==='ArrowRight') document.getElementById('modalPrev').click();
+});
+
+/* ==== COMMUNITY MARQUEE ==== */
+const track = document.getElementById('marqueeTrack');
+function personCard(p){
+  const photo = p.photo
+    ? `<img src="${p.photo}" alt="${p.name}" onerror="this.remove()">`
+    : '';
+  return `
+    <div class="person">
+      <div class="flipper">
+        <div class="face front">
+          <div class="photo">
+            ${photo}
+            <span class="ph-tag">PORTRAIT · ${p.name.split(' ')[0]}</span>
+          </div>
+          <div class="name-strip">
+            <div class="n">${p.name}</div>
+            <div class="r">${p.role}</div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="n">${p.name}</div>
+          <div class="r">${p.role}</div>
+          <div class="bio">${p.bio}</div>
+          <div class="studio">${p.studio}</div>
+          <div class="contact">
+            <a href="tel:${p.phone.replace(/\s/g,'')}" aria-label="اتصال">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.9.34 1.78.63 2.62a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.46-1.46a2 2 0 0 1 2.11-.45c.84.29 1.72.5 2.62.63A2 2 0 0 1 22 16.92z"/></svg>
+              ${p.phone}
+            </a>
+            <a href="https://instagram.com/${p.insta}" target="_blank" rel="noopener" aria-label="إنستغرام">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg>
+              @${p.insta}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+const cards = PEOPLE.map(personCard).join('');
+/* duplicate 3x so we can scroll forward or backward and silently snap back to the middle copy */
+track.innerHTML = cards + cards + cards;
+
+const marquee = document.getElementById('marquee');
+let loopWidth = 0;
+function measureLoop(){
+  loopWidth = track.scrollWidth / 3;
+  marquee.scrollLeft = loopWidth;
+}
+window.addEventListener('load', measureLoop);
+window.addEventListener('resize', measureLoop);
+
+/* keep scroll position inside the middle copy so it feels infinite in both directions */
+function normalizeScroll(){
+  if(!loopWidth) return;
+  if(marquee.scrollLeft >= loopWidth * 2) marquee.scrollLeft -= loopWidth;
+  else if(marquee.scrollLeft <= 0) marquee.scrollLeft += loopWidth;
+}
+marquee.addEventListener('scroll', normalizeScroll);
+
+/* gentle auto-scroll; pauses on user interaction */
+let autoOn = true;
+let lastInteract = 0;
+function step(){
+  if(autoOn && performance.now() - lastInteract > 1500){
+    marquee.scrollLeft += 0.6;
+    normalizeScroll();
+  }
+  requestAnimationFrame(step);
+}
+requestAnimationFrame(step);
+function bumpInteract(){ lastInteract = performance.now(); }
+marquee.addEventListener('wheel', bumpInteract, {passive:true});
+marquee.addEventListener('touchstart', bumpInteract, {passive:true});
+marquee.addEventListener('mouseenter', ()=>autoOn=false);
+marquee.addEventListener('mouseleave', ()=>autoOn=true);
+
+/* drag to scroll (desktop) */
+let dragging=false, startX=0, startScroll=0;
+marquee.addEventListener('mousedown', e=>{
+  dragging=true; startX=e.pageX; startScroll=marquee.scrollLeft;
+  marquee.classList.add('is-dragging');
+});
+window.addEventListener('mousemove', e=>{
+  if(!dragging) return;
+  marquee.scrollLeft = startScroll - (e.pageX - startX);
+});
+window.addEventListener('mouseup', ()=>{
+  if(!dragging) return;
+  dragging=false; marquee.classList.remove('is-dragging'); bumpInteract();
+});
+
+/* arrow controls — step by one card width */
+function stepBy(dir){
+  const card = track.querySelector('.person');
+  const w = card ? card.getBoundingClientRect().width + 22 : 300;
+  marquee.scrollBy({left: dir * w, behavior:'smooth'});
+  bumpInteract();
+}
+document.getElementById('commPrev').onclick = ()=>stepBy(-1);
+document.getElementById('commNext').onclick = ()=>stepBy(1);
+
+/* ==== THEME ==== */
+const html = document.documentElement;
+const themeBtn = document.getElementById('themeBtn');
+const seg = document.getElementById('segTheme');
+function setTheme(t){
+  html.setAttribute('data-theme', t);
+  [...seg.children].forEach(b=>b.classList.toggle('is-on', b.dataset.val===t));
+  try{ localStorage.setItem('sunaa-theme', t); }catch(_){}
+}
+themeBtn.addEventListener('click',()=>{
+  setTheme(html.getAttribute('data-theme')==='dark' ? 'light' : 'dark');
+});
+[...seg.children].forEach(b=>b.addEventListener('click',()=>setTheme(b.dataset.val)));
+try{ const t = localStorage.getItem('sunaa-theme'); if(t) setTheme(t); }catch(_){}
+
+/* ==== GLOW TWEAK ==== */
+const switchGlow = document.getElementById('switchGlow');
+const hero = document.getElementById('hero');
+switchGlow.addEventListener('click',()=>{
+  const on = !switchGlow.classList.contains('is-on');
+  switchGlow.classList.toggle('is-on', on);
+  switchGlow.setAttribute('aria-pressed', on);
+  hero.classList.toggle('no-glow', !on);
+});
+
+/* ==== TWEAKS PANEL ==== */
+const tweaks = document.getElementById('tweaks');
+const fab = document.getElementById('tweaksFab');
+fab.addEventListener('click',()=>tweaks.classList.toggle('is-open'));
+document.addEventListener('click',e=>{
+  if(!tweaks.contains(e.target) && !fab.contains(e.target)) tweaks.classList.remove('is-open');
+});
+
+/* ==== MOBILE MENU ==== */
+const menuBtn = document.getElementById('menuBtn');
+const navLinks = document.getElementById('navLinks');
+menuBtn.addEventListener('click',()=>navLinks.classList.toggle('is-open'));
+navLinks.addEventListener('click',e=>{ if(e.target.tagName==='A') navLinks.classList.remove('is-open'); });
+
+/* ==== YEAR ==== */
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
