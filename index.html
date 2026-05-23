@@ -116,6 +116,8 @@ button{font-family:inherit;cursor:pointer;background:none;border:0;color:inherit
 .slide .lede{
   font-size:clamp(15px,1.3vw,18px);font-weight:300;line-height:1.7;color:var(--ink-2);
   max-width:56ch;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;
+  overflow:hidden;min-height:calc(1.7em * 4);
 }
 .slide .meta{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
 .slide .meta .dot{width:3px;height:3px;border-radius:50%;background:var(--muted)}
@@ -137,9 +139,14 @@ button{font-family:inherit;cursor:pointer;background:none;border:0;color:inherit
   position:relative;height:100%;width:auto;aspect-ratio:4/5;max-width:100%;
   background:linear-gradient(135deg,#e9e7df 0%,#d6d3c8 100%);
   border:1px solid var(--rule);overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
 }
 :root[data-theme="dark"] .slide .media-frame{
   background:linear-gradient(135deg,#1c1d24 0%,#0e0f14 100%);
+}
+.slide .media-frame img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  filter:saturate(1.05) contrast(1.05);
 }
 .slide .media-frame::before{
   content:"";position:absolute;inset:0;
@@ -148,15 +155,16 @@ button{font-family:inherit;cursor:pointer;background:none;border:0;color:inherit
 :root[data-theme="dark"] .slide .media-frame::before{
   background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 2px,transparent 2px 14px);
 }
+.slide .media-frame.has-image::before{opacity:0}
 .slide .media-frame .tag{
   position:absolute;inset-inline-end:14px;top:14px;font-family:"SFMono-Regular",ui-monospace,Menlo,monospace;
   font-size:11px;letter-spacing:.06em;color:var(--ink-2);background:rgba(255,255,255,.7);
-  padding:6px 10px;border:1px solid var(--rule);
+  padding:6px 10px;border:1px solid var(--rule);z-index:2;
 }
 :root[data-theme="dark"] .slide .media-frame .tag{background:rgba(0,0,0,.5);color:var(--ink-2)}
 .slide .media-frame .num-big{
   position:absolute;left:18px;bottom:14px;font-weight:900;font-size:88px;line-height:1;
-  color:transparent;-webkit-text-stroke:1px var(--purple);font-family:"Tajawal";
+  color:transparent;-webkit-text-stroke:1px var(--purple);font-family:"Tajawal";z-index:2;
 }
 
 /* hero controls */
@@ -665,7 +673,8 @@ const HERO_SLIDES = [
     section: "الابتكار والتقنية الإبداعية",
     author: "مريم العامري",
     minutes: "11 دقيقة",
-    tag: "AI · POETRY"
+    tag: "AI · POETRY",
+    image: "assets/lens/time-traveler.jpg"
   },
   {
     kicker: "ريبورتاج",  num: "02",
@@ -674,25 +683,28 @@ const HERO_SLIDES = [
     section: "الإعلام الرقمي وصناعة المحتوى",
     author: "سالم الحارثي",
     minutes: "14 دقيقة",
-    tag: "REPORTAGE"
+    tag: "REPORTAGE",
+    image: "assets/lens/above-clouds.jpg"
   },
   {
     kicker: "ملف العدد", num: "03",
-    title: "خطّ الثلث في عصر الشاشات الصغيرة",
-    lede: "كيف يحافظ خطّاطو عُمان على روح الحرف العربي وهم يعيدون تطويعه لواجهات الموبايل والهويات الرقمية الجديدة.",
+    title: " من فستان الزفاف الى العالمية  ",
+    lede: "هنا تجربة أمل في عالم تصميم الأزياء، ونسلط الضوء على رحلتها الشخصية والمهنية، ومصادر إلهامها، ورؤيتها المستقبلية. هذا الحوار يقدم لمحة عن مسيرتها، ودورها في دعم المصممين الشباب في عمان بجانب التركيز على الهوية العمانية والتعبير عنها بأسلوب معاصر.",
     section: "الفنون والتصميم",
-    author: "ليلى البوسعيدي",
+    author: " شهد الخوالدية",
     minutes: "9 دقائق",
-    tag: "DESIGN · TYPE"
+    tag: "DESIGN · TYPE",
+    image: "blogs/thuluth-small-screens/cover.jpg"
   },
   {
     kicker: "حوار",      num: "04",
-    title: "ريادة الأعمال الإبداعية: تجارب من مسقط",
-    lede: "ثلاثة مؤسّسين عُمانيين يتحدّثون عن بناء استوديوهات إبداعية مستقلّة — العوائد، الإخفاقات، والدروس التي لم يكتبها أحد بعد.",
+    title: "   خارطة الصّناعات الثّقافيّة والإبداعيّة    ",
+    lede: "كيف تتكامل خارطة الصّناعات الثّقافيّة والإبداعيّة مع رؤيَة عُمان 2040؟",
     section: "الاقتصاد الإبداعي وريادة الأعمال",
-    author: "زينب البلوشي",
+    author: " سارا سلطان",
     minutes: "16 دقيقة",
-    tag: "INTERVIEW"
+    tag: "INTERVIEW",
+    image: "blogs/creative-founders-muscat/cover.jpg"
   }
 ];
 
@@ -736,7 +748,8 @@ HERO_SLIDES.forEach((s,i)=>{
       </div>
     </div>
     <div class="media">
-      <div class="media-frame">
+      <div class="media-frame${s.image ? ' has-image' : ''}">
+        <img src="${s.image}" alt="${s.title}">
         <span class="tag">${s.tag}</span>
         <span class="num-big">${s.num}</span>
       </div>
