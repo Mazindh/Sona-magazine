@@ -46,7 +46,7 @@ button{font-family:inherit;cursor:pointer;background:none;border:0;color:inherit
   display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:32px;
 }
 .brand{display:inline-flex;align-items:center;gap:14px}
-.brand .word-img{height:52px;width:auto;display:block}
+.brand .word-img{height:52px;width:auto;display:block;transform:translateY(-6px)}
 .brand .word-img.dark-only{display:none}
 :root[data-theme="dark"] .brand .word-img.light-only{display:none}
 :root[data-theme="dark"] .brand .word-img.dark-only{display:block}

@@ -93,16 +93,16 @@ button{font-family:inherit;cursor:pointer;background:none;border:0;color:inherit
   opacity:1;transition:opacity .5s ease;z-index:0;
 }
 .hero.no-glow .glow{opacity:0}
-.hero-track{position:relative;flex:1;display:flex;align-items:stretch;z-index:1}
+.hero-track{position:relative;flex:1;display:flex;align-items:stretch;z-index:1;pointer-events:auto}
 .slide{
   position:absolute;inset:0;display:grid;
   grid-template-columns:1.05fr .95fr;gap:clamp(24px,4vw,56px);
   padding:clamp(20px,4vw,56px) var(--pad);
   max-width:var(--maxw);margin-inline:auto;align-items:center;
-  opacity:0;transition:opacity .8s ease;pointer-events:none;
+  opacity:0;transition:opacity .8s ease;pointer-events:none;z-index:1;
 }
-.slide.is-active{opacity:1;pointer-events:auto}
-.slide .copy{display:flex;flex-direction:column;gap:18px;min-width:0}
+.slide.is-active{opacity:1;pointer-events:auto;z-index:2}
+.slide .copy{display:flex;flex-direction:column;gap:18px;min-width:0;position:relative;z-index:2;pointer-events:auto}
 .kicker{
   display:inline-flex;align-items:center;gap:10px;font-size:13px;color:var(--purple);
   letter-spacing:.04em;text-transform:uppercase;font-weight:700;
@@ -111,7 +111,7 @@ button{font-family:inherit;cursor:pointer;background:none;border:0;color:inherit
 .kicker::before{content:"";width:32px;height:1px;background:var(--purple)}
 .slide h1{
   margin:0;font-weight:900;letter-spacing:-.01em;line-height:1.05;
-  font-size:clamp(34px,5.4vw,76px);
+  font-size:clamp(28px,4.6vw,64px);
 }
 .slide .lede{
   font-size:clamp(15px,1.3vw,18px);font-weight:300;line-height:1.7;color:var(--ink-2);
@@ -121,7 +121,7 @@ button{font-family:inherit;cursor:pointer;background:none;border:0;color:inherit
 }
 .slide .meta{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--muted)}
 .slide .meta .dot{width:3px;height:3px;border-radius:50%;background:var(--muted)}
-.cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
+.cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;position:relative;z-index:2;pointer-events:auto;align-items:center}
 .btn{
   display:inline-flex;align-items:center;gap:10px;
   padding:14px 22px;border-radius:999px;font-weight:700;font-size:14px;
@@ -133,13 +133,14 @@ button{font-family:inherit;cursor:pointer;background:none;border:0;color:inherit
 .btn-ghost:hover{border-color:var(--purple);color:var(--purple)}
 .btn svg{width:16px;height:16px}
 .slide .media{
-  position:relative;height:100%;display:flex;align-items:center;justify-content:center;
+  position:relative;height:100%;display:flex;align-items:flex-start;justify-content:center;z-index:1;align-self:flex-start;
 }
 .slide .media-frame{
-  position:relative;height:100%;width:auto;aspect-ratio:4/5;max-width:100%;
+  position:relative;height:clamp(340px,66vh,560px);width:auto;aspect-ratio:4/5;max-width:100%;
   background:linear-gradient(135deg,#e9e7df 0%,#d6d3c8 100%);
   border:1px solid var(--rule);overflow:hidden;
   display:flex;align-items:center;justify-content:center;
+  transform:translateY(-12px);
 }
 :root[data-theme="dark"] .slide .media-frame{
   background:linear-gradient(135deg,#1c1d24 0%,#0e0f14 100%);
@@ -169,10 +170,15 @@ button{font-family:inherit;cursor:pointer;background:none;border:0;color:inherit
 
 /* hero controls */
 .hero-controls{
-  position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;
+  position:relative;z-index:1;display:grid;align-items:center;grid-template-columns:auto 1fr auto;
   padding:18px var(--pad) 22px;max-width:var(--maxw);margin-inline:auto;width:100%;
-  border-top:1px solid var(--rule);
+  border-top:1px solid var(--rule);pointer-events:none;direction:ltr;
 }
+.hero-controls .arrow,
+.hero-controls .dots button{pointer-events:auto}
+.hero-controls .arrows{display:flex;gap:10px}
+.hero-controls .dots{justify-content:center}
+.hero-controls .hero-spacer{width:98px;height:1px}
 .dots{display:flex;gap:8px;align-items:center}
 .dots button{
   width:10px;height:10px;border-radius:50%;border:1px solid var(--rule-strong);
@@ -492,15 +498,16 @@ button{font-family:inherit;cursor:pointer;background:none;border:0;color:inherit
   <div class="glow" aria-hidden="true"></div>
   <div class="hero-track" id="heroTrack"></div>
   <div class="hero-controls">
-    <div class="dots" id="heroDots" role="tablist"></div>
     <div class="arrows">
       <button class="arrow" id="heroPrev" aria-label="السابق">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6l6 6-6 6"/></svg>
-      </button>
-      <button class="arrow" id="heroNext" aria-label="التالي">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 6l-6 6 6 6"/></svg>
       </button>
+      <button class="arrow" id="heroNext" aria-label="التالي">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
     </div>
+    <div class="dots" id="heroDots" role="tablist"></div>
+    <div class="hero-spacer" aria-hidden="true"></div>
   </div>
 </section>
 
@@ -668,40 +675,40 @@ button{font-family:inherit;cursor:pointer;background:none;border:0;color:inherit
 const HERO_SLIDES = [
   {
     kicker: "افتتاحية العدد", num: "01",
-    title: "حين يكتب الذكاء الاصطناعي قصيدةً عربية",
-    lede: "ماذا يحدث للقصيدة حين تمرّ عبر خوارزمية؟ قراءة في حدود التعاون بين الشاعر والآلة، ومحاولات عُمانية مبكّرة لإيجاد صوت أدبي هجين.",
+    title: "كيف تحوّلت الرياضات الإلكترونية من ترفيه إلى صناعة اقتصادية؟",
+    lede: "لم تعد الرياضات الإلكترونية مجرد وسيلة ترفيه، بل تحوّلت خلال سنوات قليلة إلى واحدة من أسرع الصناعات نموًا في الاقتصاد الرقمي العالمي.",
     section: "الابتكار والتقنية الإبداعية",
-    author: "مريم العامري",
+    author: " ",
     minutes: "11 دقيقة",
     tag: "AI · POETRY",
-    image: "assets/lens/time-traveler.jpg"
+    image: "blogs/ai-arabic-poetry/cover.jpg"
   },
   {
     kicker: "ريبورتاج",  num: "02",
-    title: "صناعة المحتوى العُماني تتشكّل من جديد",
-    lede: "من مايكرو-إنفلونسرز في صلالة إلى استوديوهات بودكاست في مطرح — جولة بين الفاعلين الجدد الذين يعيدون تعريف المنصّات المحلية.",
+    title: " الانطلاقة تبدأ من الطقس والفراغ",
+    lede: "صناعة المحتوى الرقمي عالم متسع لكل من يفكر خارج الصندوق وشغوف لكن الأمر مختلف بالنسبة لسعود المعمري،",
     section: "الإعلام الرقمي وصناعة المحتوى",
-    author: "سالم الحارثي",
+    author: " أسيل الحضرمية",
     minutes: "14 دقيقة",
     tag: "REPORTAGE",
-    image: "assets/lens/above-clouds.jpg"
+    image: "blogs/micro-influencers-salalah/cover.jpg"
   },
   {
     kicker: "ملف العدد", num: "03",
-    title: " من فستان الزفاف الى العالمية  ",
+    title: "من فستان الزفاف الى العالمية",
     lede: "هنا تجربة أمل في عالم تصميم الأزياء، ونسلط الضوء على رحلتها الشخصية والمهنية، ومصادر إلهامها، ورؤيتها المستقبلية. هذا الحوار يقدم لمحة عن مسيرتها، ودورها في دعم المصممين الشباب في عمان بجانب التركيز على الهوية العمانية والتعبير عنها بأسلوب معاصر.",
     section: "الفنون والتصميم",
-    author: " شهد الخوالدية",
+    author: "شهد الخوالدية",
     minutes: "9 دقائق",
     tag: "DESIGN · TYPE",
     image: "blogs/thuluth-small-screens/cover.jpg"
   },
   {
     kicker: "حوار",      num: "04",
-    title: "   خارطة الصّناعات الثّقافيّة والإبداعيّة    ",
+    title: "خارطة الصّناعات الثقافية والإبداعيّة",
     lede: "كيف تتكامل خارطة الصّناعات الثّقافيّة والإبداعيّة مع رؤيَة عُمان 2040؟",
     section: "الاقتصاد الإبداعي وريادة الأعمال",
-    author: " سارا سلطان",
+    author: "سارا سلطان",
     minutes: "16 دقيقة",
     tag: "INTERVIEW",
     image: "blogs/creative-founders-muscat/cover.jpg"
